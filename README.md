@@ -1,5 +1,3 @@
-# بسم اللہ الرحمن الرحیم
-
 ## Basic Recommender System
 This repository contains a Basic Product Recommender Systen to be used with native and AWS EMR Hadoop. It's actually a collection of mapper and reducer files to be run on different stages in Hadoop or Amazon's AWS Elastic MapReduce.
 
