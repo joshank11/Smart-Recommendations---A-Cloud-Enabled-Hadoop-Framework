@@ -25,6 +25,3 @@ Now since upto this step we have all the required data in our desired format, in
 
 ### Stage-4: Makes Recommendation
 Finally, we do reverse sorting over the recommended list, and recommend the top matches only, upto 12 recommendations. Final output is stored in [output](output)/final-out.txt file.
-
-## License
-MIT
