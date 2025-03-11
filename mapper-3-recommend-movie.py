@@ -1,30 +1,28 @@
 #!/usr/bin/env python
 
-''' 
-[Mapper - Stage 3 - Recommend Movies]
-Author: Ammar Hasan Razvi
-'''
-
 import sys
 import csv
 
-'''
-Algorithm:
-'''
+# Read originalId from command-line arguments (default to 11 if not provided)
+try:
+    originalId = int(sys.argv[1]) if len(sys.argv) > 1 else 11
+except ValueError:
+    print("Invalid originalId, using default (11).", file=sys.stderr)
+    originalId = 11
 
-originalId = 11
-
+reader = csv.reader(sys.stdin)
 writer = csv.writer(sys.stdout, quoting=csv.QUOTE_NONNUMERIC)
-for row in csv.reader(iter(sys.stdin.readline, '')):
-  if row[0] == 'movieId':
-    continue
 
-  movieId = int(row[0])
+# Skip header
+next(reader, None)
 
-  
-  if movieId == originalId:
-    row.insert(0, 'a')
-  else:
-    row.insert(0, 'b')
+for row in reader:
+    try:
+        movieId = int(row[0])
 
-  writer.writerow(row)
+        # Tagging the row
+        row.insert(0, 'a' if movieId == originalId else 'b')
+        writer.writerow(row)
+    
+    except (ValueError, IndexError):
+        continue  # Skip malformed rows
