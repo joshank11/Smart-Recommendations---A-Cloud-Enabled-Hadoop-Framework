@@ -1,19 +1,22 @@
 #!/usr/bin/env python
 
-''' 
-[Mapper - Stage 4 - Make Recommendations]
-Author: Ammar Hasan Razvi
-'''
-
 import sys
 import csv
 
-'''
-Algorithm:
-'''
-
 writer = csv.writer(sys.stdout, delimiter='\t', quoting=csv.QUOTE_NONNUMERIC)
-for row in csv.reader(iter(sys.stdin.readline, '')):
-  key = '%s-%s-%s' % (row[4].strip(), row[5].strip(), row[0].strip())
-  row.insert(0, key)
-  writer.writerow(row)
+reader = csv.reader(sys.stdin)
+
+for row in reader:
+    try:
+        rating = float(row[4].strip())
+        totalRatings = int(row[5].strip())
+        similarity = float(row[0].strip())
+
+        # Creating a sortable key (higher rating, higher totalRatings, higher similarity)
+        key = f"{rating:06.3f}-{totalRatings:06d}-{similarity:.6f}"
+
+        row.insert(0, key)
+        writer.writerow(row)
+
+    except (ValueError, IndexError):
+        continue  # Skip invalid rows
