@@ -1,43 +1,35 @@
 #!/usr/bin/env python
 
-''' 
-[Reducer - Stage 4 - Make Recommendations]
-Author: Ammar Hasan Razvi
-'''
-
 import sys
 import csv
 
-'''
-Algorithm:
-'''
+# Constants for filtering
 MAX_RECOS = 14
 MIN_RATING = 3.0
 MIN_SIMILAR = 0.95
 
-recos = 0
-
-print('movieId,title,genre,rating,totalRatings')
+print("movieId,title,genre,rating,totalRatings")
 writer = csv.writer(sys.stdout, quoting=csv.QUOTE_NONNUMERIC)
 
-for row in csv.reader(iter(sys.stdin.readline, ''), delimiter='\t'):
-  rating = float(row[5].strip())
+reader = csv.reader(sys.stdin, delimiter="\t")
 
-  if rating < MIN_RATING:
-    continue
+for recos, row in enumerate(reader):
+    if recos >= MAX_RECOS:
+        break  # Stop when max recommendations reached
 
-  similarity = float(row[1].strip())
-  if similarity < MIN_SIMILAR:
-    continue
+    try:
+        similarity = float(row[1].strip())
+        rating = float(row[5].strip())
 
-  if recos >= MAX_RECOS:
-    continue
+        if rating < MIN_RATING or similarity < MIN_SIMILAR:
+            continue  # Skip movies that don't meet criteria
 
-  movieId = int(row[2].strip())
-  title = row[3].strip()
-  genre = row[4].strip()
-  totalRatings = int(row[6].strip())
+        movieId = int(row[2].strip())
+        title = row[3].strip()
+        genre = row[4].strip()
+        totalRatings = int(row[6].strip())
 
-  writer.writerow([movieId, title, genre, rating, totalRatings])
+        writer.writerow([movieId, title, genre, rating, totalRatings])
 
-  recos += 1
+    except (ValueError, IndexError):
+        continue  # Skip invalid rows
