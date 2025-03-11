@@ -1,19 +1,14 @@
 #!/usr/bin/env python
 
-''' 
-[Mapper - Stage 1 - Average User Ratings]
-Author: Ammar Hasan Razvi
-'''
-
 import sys
 import csv
 
-'''
-Algorithm:
-'''
+reader = csv.reader(sys.stdin)
+next(reader, None)  # Skip header row
 
-for row in csv.reader(iter(sys.stdin.readline, '')):
-  if row[0] == 'userId':
-    continue
-
-  print('%s,%s' % (row[1], row[2]))
+for row in reader:
+    try:
+        movie_id, rating = row[1], row[2]
+        print(f"{movie_id},{rating}")
+    except IndexError:
+        continue  # Skip malformed rows
