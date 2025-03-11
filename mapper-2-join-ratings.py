@@ -1,27 +1,22 @@
 #!/usr/bin/env python
 
-''' 
-[Mapper - Stage 2 - Join Movies and Ratings]
-Author: Ammar Hasan Razvi
-'''
-
 import sys
 import csv
 
-'''
-Algorithm:
-'''
-
 writer = csv.writer(sys.stdout, quoting=csv.QUOTE_NONNUMERIC)
-for row in csv.reader(iter(sys.stdin.readline, '')):
-  a = row[0].strip()
-  b = row[1].strip()
-  c = row[2].strip()
+reader = csv.reader(sys.stdin)
 
-  if a == 'movieId':
-    continue
+for row in reader:
+    try:
+        if row[0].strip() == 'movieId':
+            continue  # Skip header row
 
-  if len(row) == 4:
-    writer.writerow([int(a), 'rating', float(b), int(c)])
-  else:
-    writer.writerow([int(a), 'profile', b, c])
+        movie_id = int(row[0].strip())
+
+        if len(row) == 4:  # Ratings.csv format (movieId, rating, totalRatings)
+            writer.writerow([movie_id, 'rating', float(row[1].strip()), int(row[2].strip())])
+        else:  # Movies.csv format (movieId, title, genres)
+            writer.writerow([movie_id, 'profile', row[1].strip(), row[2].strip()])
+
+    except (IndexError, ValueError):
+        continue  # Skip malformed rows
